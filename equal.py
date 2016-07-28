@@ -2,7 +2,8 @@
 
 import sys
 import os 
-from heapq import heappush, heappop, heapify  
+from heapq import heappush, heappop, heapify 
+from math import floor
 
 # https://www.hackerrank.com/challenges/equal
         
@@ -12,9 +13,6 @@ def search(arr):
     heap = []
     for item in arr:
         heappush(heap, -item)
-    heap1 = []
-    for item in arr:
-        heappush(heap1, item)
     moves = 0
     min_val = max(heap)
     diff = 100
@@ -22,16 +20,16 @@ def search(arr):
         max_val = heappop(heap)
         diff = abs(max_val - min_val)
         if diff >= 5:
-            add = 5
-        # add 2
-        elif diff >= 2:
-            add = 2
-        # add 1
+            times = floor(diff/5)
+            heappush(heap,max_val+times*5)
+        elif diff >=2:
+            times = floor(diff/2)
+            heappush(heap,max_val+times*2)
         else:
-            add = 1
-        heappush(heap,max_val+add)
-        moves += 1
-    return(moves-1)        
+            times = 1
+            heappush(heap,max_val+times)
+        moves += times
+    return(moves-1)          
 
 T = int(input().strip())
 
