@@ -8,22 +8,6 @@ from heapq import heappush, heappop, heapify
         
 # functions
 
-def update_array(heap,min_val):
-    max_val = heappop(heap)
-    diff = abs(max_val - min_val)
-    if diff >= 5:
-        add = 5
-    # add 2
-    elif diff >= 2:
-        add = 2
-    # add 1
-    else:
-        add = 1
-    heap = [x-add for x in heap]
-    heappush(heap,max_val)
-    min_val -= add
-    return([heap,min_val])
-
 def search(arr):   
     heap = []
     for item in arr:
@@ -33,10 +17,21 @@ def search(arr):
         heappush(heap1, item)
     moves = 0
     min_val = max(heap)
-    while len(set(heap)) > 1:
-        [heap,min_val] = update_array(heap,min_val)
+    diff = 100
+    while diff > 0:
+        max_val = heappop(heap)
+        diff = abs(max_val - min_val)
+        if diff >= 5:
+            add = 5
+        # add 2
+        elif diff >= 2:
+            add = 2
+        # add 1
+        else:
+            add = 1
+        heappush(heap,max_val+add)
         moves += 1
-    return(moves)          
+    return(moves-1)        
 
 T = int(input().strip())
 
