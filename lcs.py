@@ -31,13 +31,13 @@ for i in range(1,n+1):
             seq.append(a)
             table[tuple([i,j])] = seq
         else:
-            ti = table[tuple([i-1,j])]
-            tj = table[tuple([i,j-1])]
+            ti = table[tuple([i-1,j])].copy()
+            tj = table[tuple([i,j-1])].copy()
             
             if len(ti) > len(tj):
-                table[tuple([i,j])] = ti.copy()
+                table[tuple([i,j])] = ti
             else:
-                table[tuple([i,j])] = tj.copy()
+                table[tuple([i,j])] = tj
  
 # output result
 out = table[tuple([n,m])]
