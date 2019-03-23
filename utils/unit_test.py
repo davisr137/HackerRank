@@ -1,9 +1,12 @@
+#!/bin/python3
+
 import unittest2 as unittest
 import os
 
 class TestCase(unittest.TestCase):
     """
-    Shell class for unit test test case.
+    Shell class for test case for unit test. Use as a base class
+    for implementation of individual challenges.
     """
     @staticmethod
     def get_input_filenames():
@@ -45,8 +48,38 @@ class TestCase(unittest.TestCase):
         return test_names
 
     @staticmethod
-    def read_input(filename):
+    def build_input_filename(test_name):
+        """
+        Build input filename. 
+        Args:
+            test_name (str): Name of test.
+        Returns:
+            str: Filename corresponding to test input.
+        """
+        return 'input/input%s.txt' % test_name
 
+    @staticmethod
+    def build_output_filename(test_name):
+        """
+        Build output filename.
+        Args:
+            test_name (str): Name of test.
+        Returns:
+            str: Filename corresponding to test expected output.
+        """
+        return 'output/output%s.txt' % test_name
+
+    @staticmethod
+    def read_input(filename):
+        """
+        Read input data (array-like).
+
+        Args: 
+            filename (str): Path to input file.
+
+        Returns:
+            list of list of int: Input data.
+        """
         with open(filename, 'r') as f:
             arr = f.readlines()
         arr = [list(map(int, x.rstrip().split())) for x in arr]
@@ -54,18 +87,15 @@ class TestCase(unittest.TestCase):
 
     @staticmethod
     def read_output(filename):
+        """
+        Read output data (integer).
+
+        Args:
+            filename (str): Path to output file.
+
+        Returns:
+            int: Output data.
+        """
         with open(filename, 'r') as f:
             out = int(f.readlines()[0])
         return out
-
-    def test_challenge(self):
-        input_fns = TestCase.get_input_filenames()
-        output_fns = TestCase.get_output_filenames()
-        test_names = TestCase.get_test_names(input_fns, output_fns)
-        for test_name in test_names:
-            input_fn = TestCase.build_input_filename(test_name)
-            output_fn = TestCase.build_output_filename(test_name)
-            arr = TestCase.read_input(input_fn)
-            res = get_hourglass_sum(arr)
-            expected = TestCase.read_output(output_fn)
-            self.assertEqual(res, expected)
