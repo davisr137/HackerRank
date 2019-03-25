@@ -6,7 +6,6 @@ import random
 import re
 import sys
 
-
 def normalize_array(array, val):
     """
     Normalize array after a value is removed. For each element
@@ -28,7 +27,7 @@ class Array(object):
     """
     Class to keep track of 'state' of task (i.e. the array).
     """
-    def __init__(self, arr, arr_sorted=None):
+    def __init__(self, arr, arr_sorted=None, removed=None):
         """
         Initialize unordered array. 
         Args:
@@ -38,10 +37,11 @@ class Array(object):
         """
         if arr_sorted is None:
             arr_sorted = sorted(arr)
-        removed = list()
-        for i, val in enumerate(arr):
-            if val == arr_sorted[i]:
-                removed.append(val)
+        if removed is None:
+            removed = list()
+            for i, val in enumerate(arr):
+                if val == arr_sorted[i]:
+                    removed.append(val)
         if len(removed) > 0:
             removed = sorted(removed, reverse=True)
             for val in removed:
@@ -67,7 +67,12 @@ class Array(object):
         tmp = arr_swp[j]
         arr_swp[j] = arr_swp[i]
         arr_swp[i] = tmp
-        return Array(arr_swp, arr_sorted=self.arr_sorted)
+        removed = list()
+        if arr_swp[i] == i+1:
+            removed.append(i+1)
+        if arr_swp[j] == j+1:
+            removed.append(j+1)
+        return Array(arr_swp, arr_sorted=self.arr_sorted, removed=removed)
 
 
 def get_swap_index(arr):
@@ -78,13 +83,13 @@ def get_swap_index(arr):
     Returns:
         swap_i (int): Index on which to swap.
     """
-    l = len(arr.arr)
-    swap_i = 0
-    for i in reversed(range(0, l)):
-        if arr.arr[i] == i+1:
-            swap_i = i
-            break
-    return swap_i
+    #l = len(arr.arr)
+    #swap_i = 0
+    #for i in reversed(range(0, l)):
+    #    if arr.arr[i] == i+1:
+    #        swap_i = i
+    #        break
+    return(len(arr.arr)-1)
 
 
 def minimum_swaps(arr):

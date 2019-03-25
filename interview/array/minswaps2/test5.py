@@ -50,9 +50,7 @@ class Array(object):
             for val in removed:
                 arr.remove(val)
                 arr = normalize_array(arr, val)
-                for i in range(val, len(arr_sorted)):
-                    arr_sorted[i] -= 1
-                arr_sorted.remove(val)
+            arr_sorted = list(range(1, len(arr)+1))
         self.arr = arr
         self.arr_sorted = arr_sorted
 
@@ -79,25 +77,6 @@ class Array(object):
         return Array(arr_swp, arr_sorted=self.arr_sorted, removed=removed)
 
 
-def get_swap_index(arr):
-    """
-    Generate possible swaps for array.
-
-    Args:
-        arr (Array): Our array.
-
-    Returns:
-        swap_i (int): Index on which to swap.
-    """
-    #l = len(arr.arr)
-    #swap_i = 0
-    #for i in reversed(range(0, l)):
-    #    if arr.arr[i] == i+1:
-    #        swap_i = i
-    #        break
-    return(len(arr.arr)-1)
-
-
 def minimum_swaps(arr):
     """
     Get minimum number of swaps to sort array 'arr' in ascending
@@ -112,9 +91,8 @@ def minimum_swaps(arr):
     array = Array(arr)
     swaps = 0
     while len(array.arr) > 1:
-        i = get_swap_index(array)
-        j = array.arr[i]-1
-        array = array.swap(i, j)
+        j = array.arr[0]-1
+        array = array.swap(0, j)
         swaps += 1
     return swaps
 
