@@ -6,6 +6,7 @@ import random
 import re
 import sys
 
+
 def normalize_array(array, val):
     """
     Normalize array after a value is removed. For each element
@@ -45,9 +46,10 @@ class Array(object):
             removed = sorted(removed, reverse=True)
             for val in removed:
                 arr.remove(val)
-                arr_sorted.remove(val)
                 arr = normalize_array(arr, val)
-                arr_sorted = normalize_array(arr_sorted, val)
+                for i in range(val, len(arr_sorted)):
+                    arr_sorted[i] -= 1
+                arr_sorted.remove(val)
         self.arr = arr
         self.arr_sorted = arr_sorted
 
@@ -68,24 +70,21 @@ class Array(object):
         return Array(arr_swp, arr_sorted=self.arr_sorted)
 
 
-def generate_possible_swaps(arr):
+def get_swap_index(arr):
     """
     Generate possible swaps for array.
     Args:
         arr (Array): Our array.
     Returns:
-        score (dict): Keys (int) represent indices of the array,
-            Values (int) represent the gain in sorted values 
-            after swapping the value at the index.
+        swap_i (int): Index on which to swap.
     """
     l = len(arr.arr)
-    score = dict()
-    for i in range(0, l):
+    swap_i = 0
+    for i in reversed(range(0, l)):
         if arr.arr[i] == i+1:
-            score[i] = 2
-        else:
-            score[i] = 1
-    return score
+            swap_i = i
+            break
+    return swap_i
 
 
 def minimum_swaps(arr):
@@ -100,8 +99,7 @@ def minimum_swaps(arr):
     array = Array(arr)
     swaps = 0
     while len(array.arr) > 1:
-        score = generate_possible_swaps(array)
-        i = max(score, key=score.get) 
+        i = get_swap_index(array)
         j = array.arr[i]-1
         array = array.swap(i, j)
         swaps += 1
