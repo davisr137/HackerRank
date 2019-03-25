@@ -72,7 +72,7 @@ class Array(object):
         return Array(arr_swp, arr_sorted=self.arr_sorted)
 
 
-def generate_possible_swaps(arr):
+def get_swap_index(arr):
     """
     Generate possible swaps for array.
 
@@ -80,16 +80,15 @@ def generate_possible_swaps(arr):
         arr (Array): Our array.
 
     Returns:
-        score (dict): Keys (int) represent indices of the array,
-            Values (int) represent the gain in sorted values 
-            after swapping the value at the index.
+        swap_i (int): Index on which to swap.
     """
     l = len(arr.arr)
-    score = dict()
+    swap_i = 0
     for i in range(0, l):
         if arr.arr[i] == i+1:
-            score[i] = 2
-    return score
+            swap_i = i
+            break
+    return swap_i
 
 
 def minimum_swaps(arr):
@@ -106,11 +105,7 @@ def minimum_swaps(arr):
     array = Array(arr)
     swaps = 0
     while len(array.arr) > 1:
-        score = generate_possible_swaps(array)
-        if not score:
-            i = 0
-        else:
-            i = max(score, key=score.get) 
+        i = get_swap_index(array)
         j = array.arr[i]-1
         array = array.swap(i, j)
         swaps += 1
