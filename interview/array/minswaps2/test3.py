@@ -72,28 +72,17 @@ class Array(object):
         return Array(arr_swp, arr_sorted=self.arr_sorted)
 
 
-def increment_score(score, swp_idx):
-    """
-    Increment score by one. 
-
-    Args:
-        score (dict): Each key (int) represents an index
-            in an array. Each value (int) repreents an increase 
-            in sorted values from swapping.
-        swp_idx (tuple)
-    """
-    if swp_idx not in score:
-        score[swp_idx] = 0
-    score[swp_idx] += 1
-    return score
-
-
 def generate_possible_swaps(arr):
     """
     Generate possible swaps for array.
 
     Args:
         arr (Array): Our array.
+
+    Returns:
+        score (dict): Keys (int) represent indices of the array,
+            Values (int) represent the gain in sorted values 
+            after swapping the value at the index.
     """
     l = len(arr.arr)
     score = dict()
