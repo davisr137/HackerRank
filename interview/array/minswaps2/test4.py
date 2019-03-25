@@ -48,9 +48,10 @@ class Array(object):
             removed = sorted(removed, reverse=True)
             for val in removed:
                 arr.remove(val)
-                arr_sorted.remove(val)
                 arr = normalize_array(arr, val)
-                arr_sorted = normalize_array(arr_sorted, val)
+                for i in range(val, len(arr_sorted)):
+                    arr_sorted[i] -= 1
+                arr_sorted.remove(val)
         self.arr = arr
         self.arr_sorted = arr_sorted
 
@@ -84,7 +85,7 @@ def get_swap_index(arr):
     """
     l = len(arr.arr)
     swap_i = 0
-    for i in range(0, l):
+    for i in reversed(range(0, l)):
         if arr.arr[i] == i+1:
             swap_i = i
             break
