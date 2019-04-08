@@ -4,7 +4,15 @@ from collections import Counter
 
 def nCk(n,k):
     """
-    Implement n-choose-k combinatorial function.
+    Implement n-choose-k binomial coefficient combinatorial 
+    function.
+
+    Args:
+        n (int)
+        k (int)
+
+    Returns: 
+        int
     """
     if k > n:
         return 0
@@ -13,7 +21,8 @@ def nCk(n,k):
 
 def letter_hash(s):
     """
-    Hash function for string s.
+    Hash function for string s. Hash functions of two strings
+    should be equal if they are anagrams.
 
     Args:
         s (str)
@@ -28,12 +37,26 @@ def letter_hash(s):
 def get_all_substrings(s, k):
     """
     Get all substrings of length k from string s.
+    
+    Args:
+        s (str)
+        k (int)
+
+    Returns:
+        list of str
     """
     return [s[i:i+k] for i in range(len(s)-k+1)]
 
 def build_count_k(s, k):
     """
     Get count of how many strings map to each hash value.
+    
+    Args:
+        s (str)
+        k (int)
+
+    Returns:
+        collections.Counter
     """
     substr = get_all_substrings(s, k)
     lc = [letter_hash(st) for st in substr]
@@ -42,6 +65,13 @@ def build_count_k(s, k):
 def n_anagrams_k(s, k):
     """
     Count number of anagrams in string s of length k.
+
+    Args:
+        s (str)
+        k (int)
+
+    Returns:
+        int
     """
     ct = build_count_k(s, k)
     return sum([nCk(n, 2) for n in ct.values()])
@@ -50,6 +80,12 @@ def n_anagrams(s):
     """
     Count total number of anagrams of any length in 
     string s.
+
+    Args:
+        s (str)
+
+    Returns:
+        int
     """
     # Bogey
     if s == 'a'*100:
