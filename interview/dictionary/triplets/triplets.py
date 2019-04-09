@@ -6,6 +6,7 @@ import random
 import re
 import sys
 
+
 def build_dict(arr):
     """
     Build dictionary from array.
@@ -22,22 +23,38 @@ def build_dict(arr):
 # store (4, 1) = 2 to represent index 4 and n=1, two "couples" 
 # same couple used for four different triplets
 
-def find_triplets(arr, d, i, r, n):
+couples = dict()
 
+def find_couples(arr, d, i, r):
+
+    # Check if next value in triplet present in array
     val = arr[i] * r
     if val not in d:
         return 0
+    # If result cached, get it
+    if i in couples:
+        return couples[i]
+    # Compute number couples and memoize
+    n_couples = len([j for j in d[val] if j > i]) 
+    couples[i] = n_couples
+    return n_couples
 
+
+def find_triplets(arr, d, i, r):
+
+    # Check if next value in triplet present in array
+    val = arr[i] * r
+    if val not in d:
+        return 0
+    
     js = d[val]
     js = [j for j in js if j > i]
     
-    if n == 1:
-        return len(js)
-    elif n == 0:
-        total = 0
-        for j in js:
-            total += find_triplets(arr, d, j, r, 1)
-        return total
+    # Get remaining two elements of triplet
+    total = 0
+    for j in js:
+        total += find_couples(arr, d, j, r)
+    return total
 
 def count_triplets(arr, r):
     """
@@ -51,7 +68,7 @@ def count_triplets(arr, r):
     d = build_dict(arr)
     total = 0
     for i in range(len(arr)-2):
-        total += find_triplets(arr, d, i, r, 0)
+        total += find_triplets(arr, d, i, r)
     return total
 
 if __name__ == '__main__':
