@@ -14,8 +14,8 @@ def build_dict(arr):
     d = dict()
     for i, val in enumerate(arr):
         if val not in d:
-            d[val] = list()
-        d[val].append(i)
+            d[val] = set()
+        d[val].add(i)
     return d
 
 # Use memoization to store "couples" in dict
@@ -46,15 +46,18 @@ def find_triplets(arr, d, i, r):
     val = arr[i] * r
     if val not in d:
         return 0
-    
     js = d[val]
-    js = [j for j in js if j > i]
-    
     # Get remaining two elements of triplet
     total = 0
     for j in js:
+        total += d[j] 
         total += find_couples(arr, d, j, r)
     return total
+
+def lookup(d, val):
+    if val not in d:
+        return 0
+    return len(d[val])
 
 def count_triplets(arr, r):
     """
@@ -68,8 +71,12 @@ def count_triplets(arr, r):
     d = build_dict(arr)
     total = 0
     for i in range(len(arr)-2):
-        total += find_triplets(arr, d, i, r)
+        #total += find_triplets(arr, d, i, r)
+        val = arr[i]
+        total += lookup(d, val*r) * lookup(d, val*r*r)
+        d[val].remove(i)
     return total
+
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
