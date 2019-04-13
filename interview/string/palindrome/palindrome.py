@@ -48,10 +48,10 @@ def get_mid_palindromes_3(s):
     Returns:
         list of int: Ending indices of palindromes. 
     """
-    index = list()
+    index = set()
     for i in range(2, len(s)):
         if s[i-2] == s[i] and s[i] != s[i-1]:
-            index.append(i-1)
+            index.add(i-1)
     return index
 
 def is_mid_palindrome(s, mid, side_l):
@@ -96,24 +96,17 @@ def count_mid_palindrome(s):
     count_mid = len(index)
     side_l = 2
     while index:
-        remove = list()
+        remove = set()
         for mid in index:
             if not is_mid_palindrome(s, mid, side_l):
-                 remove.append(mid)
+                 remove.add(mid)
         for mid_r in remove:
             index.remove(mid_r)
         count_mid += len(index)
         side_l += 1
     return count_mid
 
-# How to speed up code??
-# Instead of the while loop, count the length of longest
-# string (of all the same letter) beginning at i and the 
-# length of the longest string ending at i and memoize.
-# Get the length-3 palindromes and find the max length 
-# string on either side.
 
-# Complete the substrCount function below.
 def count_palindrome(n, s):
     """
     Count total number of palindromes in string s.
