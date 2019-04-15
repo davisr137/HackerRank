@@ -161,6 +161,20 @@ class State():
                 return None
             i_letter = available[letter].pop()
 
+        # Prune available letters
+        for let in available:
+            if available[let]: 
+                if available[let][-1] > i_letter:
+                    prune = True
+                else:
+                    prune = False
+                while prune:
+                    available[let].pop()
+                    if not available[let]:
+                        prune = False
+                    elif available[let][-1] < i_letter:
+                        prune = False
+
         # Available letters exhausted
         if not available[letter]:
             del available[letter]
@@ -188,7 +202,15 @@ class State():
             return True
         else:
             return False
-        
+    
+    @property
+    def as_str(self):
+        s = '%s:' % self.i_last
+        for key in self.needed:
+            s += '%s,%s;' % (key, self.needed[key])
+        return s
+
+memo = {}
 
 def search(state):
     """
@@ -208,9 +230,16 @@ def search(state):
     if state is None:
         return 0
 
+    print(state.used)
+    # Key for memoization
+    state_str = state.as_str
+    if state_str in memo:
+        return memo[state_str]
+
     # We have found a complete "merge-able" word!! Return
     # the word.
     if state.is_complete:
+        memo[state_str] = state.used
         return state.used
 
     # Iterate through letters 
@@ -220,7 +249,9 @@ def search(state):
         # Recursively call search after adding letter
         result = search(state_next)
         if result:
+            memo[state_str] = result
             return result
+    memo[state_str] = 0
     return 0
 
 # Use memoization to store results
