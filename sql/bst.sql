@@ -1,0 +1,18 @@
+SELECT TBL.N, CASE
+    WHEN TBL.P IS NULL THEN "Root"
+    WHEN TBL.C IS NULL THEN "Leaf"
+    ELSE "Inner"
+END AS Nodes
+FROM
+(
+    SELECT BST.N, BST.P, CHL.C
+    FROM BST
+    LEFT JOIN
+    (
+        SELECT P, COUNT(N) as C
+        FROM BST
+        GROUP BY P
+    ) As CHL
+    ON BST.N = CHL.P
+) AS TBL
+ORDER BY TBL.N
